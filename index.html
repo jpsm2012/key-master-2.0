@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Master - Transforme Músicas em MIDI com IA</title>
+    <meta name="description"
+        content="Transforme qualquer música do YouTube em MIDI profissional com IA de última geração. A ferramenta definitiva para músicos e produtores.">
+    <meta name="keywords"
+        content="MIDI, conversor, YouTube, música, piano, transcrição musical, produção musical, IA, inteligência artificial, machine learning">
+    <meta name="author" content="João Pedro Mathias">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Key Master | Transcrição Musical com IA">
+    <meta property="og:description" content="Converta qualquer música em MIDI profissional em segundos.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%235c4a1a'/%3E%3Cstop offset='25%25' stop-color='%238b6914'/%3E%3Cstop offset='50%25' stop-color='%23ffd700'/%3E%3Cstop offset='75%25' stop-color='%238b6914'/%3E%3Cstop offset='100%25' stop-color='%235c4a1a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Crect x='6' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='11' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='18' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='23' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='8' y='6' width='2' height='9' rx='1' fill='%23000' opacity='0.5'/%3E%3Crect x='14' y='6' width='2' height='9' rx='1' fill='%23000' opacity='0.5'/%3E%3Crect x='22' y='6' width='2' height='9' rx='1' fill='%23000' opacity='0.5'/%3E%3C/svg%3E">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css?v=8">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/midi-player.css">
+    <link rel="stylesheet" href="css/games-section.css">
+    <link rel="stylesheet" href="css/mobile.css?v=1">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <!-- Tone.js for MIDI playback -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Mesh Background -->
+    <div class="mesh-bg"></div>
+
+    <header class="header">
+        <div class="logo">
+            <span class="icon">
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="6" y="16" width="3" height="10" rx="1" />
+                    <rect x="11" y="16" width="3" height="10" rx="1" />
+                    <rect x="18" y="16" width="3" height="10" rx="1" />
+                    <rect x="23" y="16" width="3" height="10" rx="1" />
+                    <rect x="8" y="8" width="2" height="7" rx="1" opacity="0.4" />
+                    <rect x="14" y="8" width="2" height="7" rx="1" opacity="0.4" />
+                    <rect x="22" y="8" width="2" height="7" rx="1" opacity="0.4" />
+                </svg>
+            </span>
+            <span class="text">Key Master</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="active"><span data-i18n="nav_home">Início</span></a>
+            <a href="#features"><span data-i18n="nav_features">Recursos</span></a>
+            <a href="converter.html"><span data-i18n="nav_converter">Converter</span></a>
+            <a href="#testimonials"><span data-i18n="nav_reviews">Reviews</span></a>
+            <a href="about.html"><span data-i18n="nav_about">Sobre</span></a>
+        </nav>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="pt">PT</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="es">ES</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+
+
+            <!-- Floating Musical Notes - Starry Sky Effect -->
+            <div class="floating-elements">
+                <!-- Large notes -->
+                <div class="floating-note" style="top: 15%; left: 10%; animation-delay: 0s; font-size: 2.5rem;">♪</div>
+                <div class="floating-note" style="top: 25%; right: 15%; animation-delay: 2s; font-size: 2.2rem;">♫</div>
+                <div class="floating-note" style="top: 45%; left: 20%; animation-delay: 4s; font-size: 2.8rem;">♪</div>
+                <div class="floating-note" style="top: 60%; right: 25%; animation-delay: 1s; font-size: 2.3rem;">♬</div>
+                <div class="floating-note" style="top: 70%; left: 15%; animation-delay: 3s; font-size: 2.6rem;">♫</div>
+                <div class="floating-note" style="top: 35%; right: 10%; animation-delay: 5s; font-size: 2.4rem;">♪</div>
+
+                <!-- Medium notes -->
+                <div class="floating-note" style="top: 20%; left: 30%; animation-delay: 1.5s; font-size: 1.8rem;">♩
+                </div>
+                <div class="floating-note" style="top: 50%; right: 30%; animation-delay: 3.5s; font-size: 1.6rem;">♪
+                </div>
+                <div class="floating-note" style="top: 80%; left: 40%; animation-delay: 2.5s; font-size: 1.9rem;">♫
+                </div>
+                <div class="floating-note" style="top: 10%; right: 20%; animation-delay: 4.5s; font-size: 1.7rem;">♬
+                </div>
+                <div class="floating-note" style="top: 40%; left: 5%; animation-delay: 0.5s; font-size: 1.8rem;">♪</div>
+                <div class="floating-note" style="top: 65%; right: 5%; animation-delay: 3.2s; font-size: 1.6rem;">♫
+                </div>
+
+                <!-- Small notes -->
+                <div class="floating-note"
+                    style="top: 12%; left: 25%; animation-delay: 2.8s; font-size: 1.2rem; opacity: 0.3;">♪</div>
+                <div class="floating-note"
+                    style="top: 28%; right: 35%; animation-delay: 1.2s; font-size: 1.3rem; opacity: 0.3;">♩</div>
+                <div class="floating-note"
+                    style="top: 55%; left: 35%; animation-delay: 4.2s; font-size: 1.1rem; opacity: 0.3;">♫</div>
+                <div class="floating-note"
+                    style="top: 75%; right: 40%; animation-delay: 0.8s; font-size: 1.4rem; opacity: 0.3;">♪</div>
+                <div class="floating-note"
+                    style="top: 18%; left: 50%; animation-delay: 3.8s; font-size: 1.2rem; opacity: 0.3;">♬</div>
+                <div class="floating-note"
+                    style="top: 42%; right: 45%; animation-delay: 2.2s; font-size: 1.3rem; opacity: 0.3;">♫</div>
+                <div class="floating-note"
+                    style="top: 68%; left: 55%; animation-delay: 5.2s; font-size: 1.1rem; opacity: 0.3;">♪</div>
+                <div class="floating-note"
+                    style="top: 85%; right: 50%; animation-delay: 1.8s; font-size: 1.4rem; opacity: 0.3;">♩</div>
+
+                <!-- Extra small notes (stars) -->
+                <div class="floating-note"
+                    style="top: 8%; left: 45%; animation-delay: 4.8s; font-size: 0.9rem; opacity: 0.25;">♪</div>
+                <div class="floating-note"
+                    style="top: 22%; right: 55%; animation-delay: 2.4s; font-size: 0.8rem; opacity: 0.25;">♫</div>
+                <div class="floating-note"
+                    style="top: 38%; left: 60%; animation-delay: 3.6s; font-size: 0.9rem; opacity: 0.25;">♩</div>
+                <div class="floating-note"
+                    style="top: 52%; right: 60%; animation-delay: 1.4s; font-size: 0.8rem; opacity: 0.25;">♪</div>
+                <div class="floating-note"
+                    style="top: 72%; left: 65%; animation-delay: 5.4s; font-size: 0.9rem; opacity: 0.25;">♬</div>
+                <div class="floating-note"
+                    style="top: 88%; right: 65%; animation-delay: 0.4s; font-size: 0.8rem; opacity: 0.25;">♫</div>
+                <div class="floating-note"
+                    style="top: 5%; left: 70%; animation-delay: 3.4s; font-size: 0.9rem; opacity: 0.25;">♪</div>
+                <div class="floating-note"
+                    style="top: 32%; right: 70%; animation-delay: 2.6s; font-size: 0.8rem; opacity: 0.25;">♩</div>
+                <div class="floating-note"
+                    style="top: 48%; left: 75%; animation-delay: 4.4s; font-size: 0.9rem; opacity: 0.25;">♫</div>
+                <div class="floating-note"
+                    style="top: 62%; right: 75%; animation-delay: 1.6s; font-size: 0.8rem; opacity: 0.25;">♪</div>
+                <div class="floating-note"
+                    style="top: 78%; left: 80%; animation-delay: 5.6s; font-size: 0.9rem; opacity: 0.25;">♬</div>
+                <div class="floating-note"
+                    style="top: 92%; right: 80%; animation-delay: 0.6s; font-size: 0.8rem; opacity: 0.25;">♫</div>
+            </div>
+
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    <span data-i18n="hero_badge">Powered by Advanced AI Technology</span>
+                </div>
+
+                <h1>
+                    <span class="line" data-i18n="hero_title_line1">A Nova Era da</span>
+                    <span class="line"><span class="highlight"><span class="typewriter"
+                                data-words='["Transcrição Musical", "Criação MIDI", "Produção Musical", "Arte Sonora"]'></span></span></span>
+                </h1>
+
+                <p class="subtitle" data-i18n="hero_subtitle">
+                    Transforme qualquer música do YouTube em arquivos MIDI profissionais com precisão de 98%.
+                    Algoritmos de inteligência artificial treinados com milhões de partituras.
+                </p>
+
+                <div class="cta-container">
+                    <a href="#converter" class="cta-button">
+                        <span data-i18n="hero_cta_primary">Começar Agora — É Grátis</span>
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                    <a href="#features" class="cta-secondary">
+                        <span data-i18n="hero_cta_secondary">Ver Como Funciona</span>
+                    </a>
+                </div>
+            </div>
+
+
+        </section>
+
+
+        <!-- Marquee Section -->
+        <section class="marquee-section">
+            <div class="marquee-track">
+                <div class="marquee-content">
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" />
+                            <path d="M2 17L12 22L22 17M2 12L12 17L22 12" />
+                        </svg>
+                        <span>Machine Learning</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                        <span>Neural Networks</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
+                        </svg>
+                        <span>Real-time Processing</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        </svg>
+                        <span>Cloud Infrastructure</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        <span>Secure & Private</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                        </svg>
+                        <span>MIDI Professional</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                </div>
+                <div class="marquee-content">
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" />
+                            <path d="M2 17L12 22L22 17M2 12L12 17L22 12" />
+                        </svg>
+                        <span>Machine Learning</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                        <span>Neural Networks</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
+                        </svg>
+                        <span>Real-time Processing</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        </svg>
+                        <span>Cloud Infrastructure</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        <span>Secure & Private</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                    <div class="marquee-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                        </svg>
+                        <span>MIDI Professional</span>
+                    </div>
+                    <span class="marquee-divider">◆</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow" data-i18n="features_eyebrow">Recursos Exclusivos</span>
+                    <h2 data-i18n="features_title">Tecnologia que Define o Futuro</h2>
+                    <p data-i18n="features_subtitle">Combinamos o poder da inteligência artificial com anos de pesquisa
+                        em teoria musical para
+                        entregar a experiência de transcrição mais avançada do mundo.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-number">01</span>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" />
+                                <path d="M2 17L12 22L22 17" opacity="0.6" />
+                                <path d="M2 12L12 17L22 12" opacity="0.8" />
+                            </svg>
+                        </div>
+                        <h3 data-i18n="feature1_title">IA de Última Geração</h3>
+                        <p data-i18n="feature1_desc">Redes neurais profundas treinadas com mais de 10 milhões de
+                            partituras para identificação
+                            precisa de cada nota, acorde e nuance musical.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-number">02</span>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6V12L16 14" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                    fill="none" />
+                            </svg>
+                        </div>
+                        <h3 data-i18n="feature2_title">Velocidade Absurda</h3>
+                        <p data-i18n="feature2_desc">Infraestrutura de cloud computing distribuída globalmente. Músicas
+                            de 5 minutos processadas
+                            em menos de 5 segundos.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <span class="feature-number">03</span>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 18V5L12 2L15 5V18C15 19.1 14.1 20 13 20H11C9.9 20 9 19.1 9 18Z" />
+                                <path d="M5 10V18C5 19.1 5.9 20 7 20H9V10C9 8.9 8.1 8 7 8C5.9 8 5 8.9 5 10Z"
+                                    opacity="0.6" />
+                                <path d="M15 10V20H17C18.1 20 19 19.1 19 18V10C19 8.9 18.1 8 17 8C15.9 8 15 8.9 15 10Z"
+                                    opacity="0.6" />
+                            </svg>
+                        </div>
+                        <h3 data-i18n="feature3_title">Multi-Instrumento</h3>
+                        <p data-i18n="feature3_desc">Suporte nativo para piano, synths, guitarras, baixo, cordas
+                            orquestrais, metais, percussão e
+                            muito mais.</p>
+                    </div>
+                </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow" data-i18n="testimonials_eyebrow">Depoimentos Reais</span>
+                    <h2 data-i18n="testimonials_title">O Que Dizem Nossos Usuários</h2>
+                    <p data-i18n="testimonials_subtitle">Milhares de músicos e produtores já transformaram seu fluxo de
+                        trabalho com o Key Master.</p>
+                </div>
+
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                        </div>
+                        <p class="testimonial-text" data-i18n="testimonial1_text">Absolutamente incrível! Consegui
+                            transcrever em 5 segundos o que
+                            levaria horas fazendo manualmente. A precisão nas notas é simplesmente impressionante.</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">MR</div>
+                            <div class="testimonial-info">
+                                <h4 data-i18n="testimonial1_name">Marcos Ribeiro</h4>
+                                <span data-i18n="testimonial1_role">Produtor Musical • São Paulo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                        </div>
+                        <p class="testimonial-text" data-i18n="testimonial2_text">Uso diariamente para estudar peças
+                            complexas. A qualidade do MIDI
+                            gerado é excepcional e me permite focar 100% no aprendizado e prática.</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">AS</div>
+                            <div class="testimonial-info">
+                                <h4 data-i18n="testimonial2_name">Ana Santos</h4>
+                                <span data-i18n="testimonial2_role">Pianista Profissional • Rio de Janeiro</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                        </div>
+                        <p class="testimonial-text" data-i18n="testimonial3_text">Ferramenta indispensável no meu
+                            estúdio. Economizo pelo menos 10
+                            horas de trabalho por semana. É simplesmente revolucionário!</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">LC</div>
+                            <div class="testimonial-info">
+                                <h4 data-i18n="testimonial3_name">Lucas Costa</h4>
+                                <span data-i18n="testimonial3_role">Compositor & Arranjador • Curitiba</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <h2 data-i18n="about_title">Sobre o Projeto</h2>
+                    <p data-i18n="about_text" data-i18n-html="true">O <strong>Key Master</strong> nasceu da fusão entre
+                        tecnologia de ponta e paixão pela música.
+                        Nossa missão é democratizar o acesso à transcrição musical profissional, permitindo que artistas
+                        de todos os níveis transformem inspiração em partitura digital com a precisão que antes era
+                        exclusiva de grandes estúdios.</p>
+                    <div class="founder-card">
+                        <div class="avatar">JP</div>
+                        <div class="info">
+                            <h4 data-i18n="about_founder_name">João Pedro Mathias</h4>
+                            <span data-i18n="about_founder_role">Founder & Lead Developer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>KEY MASTER</h3>
+                    <p data-i18n="footer_tagline">O futuro da música digital.</p>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="currentColor"
+                                stroke-width="2" />
+                            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2" />
+                            <circle cx="18" cy="6" r="1.5" fill="currentColor" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter/X">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="copyright" data-i18n="footer_copyright">
+                &copy; 2026 Key Master. Todos os direitos reservados. Desenvolvido com ❤️ no Brasil.
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/background.js"></script>
+    <script src="js/converter.js"></script>
+    <script src="js/midi-player.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Premium Scripts -->
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 800);
+        });
+
+
+
+        // Smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .testimonial-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(40px)';
+            card.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            observer.observe(card);
+        });
+    </script>
+    <!-- Interactive Scripts -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

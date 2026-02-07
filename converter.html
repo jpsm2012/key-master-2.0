@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor MIDI - Key Master</title>
+    <meta name="description"
+        content="Transforme qualquer música do YouTube em MIDI profissional com IA de última geração.">
+    <meta name="keywords" content="MIDI, conversor, YouTube, música, piano, transcrição musical, produção musical, IA">
+    <meta name="author" content="João Pedro Mathias">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Conversor - Key Master | Transcrição Musical com IA">
+    <meta property="og:description" content="Converta qualquer música em MIDI profissional em segundos.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%235c4a1a'/%3E%3Cstop offset='25%25' stop-color='%238b6914'/%3E%3Cstop offset='50%25' stop-color='%23ffd700'/%3E%3Cstop offset='75%25' stop-color='%238b6914'/%3E%3Cstop offset='100%25' stop-color='%235c4a1a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Crect x='6' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='11' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='18' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='23' y='16' width='3' height='10' rx='1' fill='%23000'/%3E%3Crect x='8' y='6' width='2' height='9' rx='1' fill='%23000' opacity='0.5'/%3E%3Crect x='14' y='6' width='2' height='9' rx='1' fill='%23000' opacity='0.5'/%3E%3Crect x='22' y='6' width='2' height='9' rx='1' fill='%23000' opacity='0.5'/%3E%3C/svg%3E">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css?v=9">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/midi-player.css">
+    <link rel="stylesheet" href="css/pages.css?v=1">
+    <link rel="stylesheet" href="css/mobile.css?v=1">
+
+    <!-- Tone.js for MIDI playback -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Mesh Background -->
+    <div class="mesh-bg"></div>
+
+    <!-- Hero Orbs -->
+    <div class="hero-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Floating Musical Notes -->
+    <div class="floating-elements">
+        <div class="floating-note" style="top: 10%; left: 8%; animation-delay: 0s; font-size: 2.5rem;">♪</div>
+        <div class="floating-note" style="top: 20%; right: 10%; animation-delay: 2s; font-size: 2.2rem;">♫</div>
+        <div class="floating-note" style="top: 50%; left: 5%; animation-delay: 4s; font-size: 2.8rem;">♪</div>
+        <div class="floating-note" style="top: 70%; right: 8%; animation-delay: 1s; font-size: 2.3rem;">♬</div>
+        <div class="floating-note" style="top: 85%; left: 12%; animation-delay: 3s; font-size: 2.6rem;">♫</div>
+        <div class="floating-note" style="top: 40%; right: 5%; animation-delay: 5s; font-size: 2.4rem;">♪</div>
+    </div>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            <span class="icon">
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="6" y="16" width="3" height="10" rx="1" />
+                    <rect x="11" y="16" width="3" height="10" rx="1" />
+                    <rect x="18" y="16" width="3" height="10" rx="1" />
+                    <rect x="23" y="16" width="3" height="10" rx="1" />
+                    <rect x="8" y="8" width="2" height="7" rx="1" opacity="0.4" />
+                    <rect x="14" y="8" width="2" height="7" rx="1" opacity="0.4" />
+                    <rect x="22" y="8" width="2" height="7" rx="1" opacity="0.4" />
+                </svg>
+            </span>
+            <span class="text">Key Master</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html"><span data-i18n="nav_home">Início</span></a>
+            <a href="index.html#features"><span data-i18n="nav_features">Recursos</span></a>
+            <a href="converter.html" class="active"><span data-i18n="nav_converter">Converter</span></a>
+            <a href="about.html"><span data-i18n="nav_about">Sobre</span></a>
+        </nav>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="pt">PT</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="es">ES</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Converter Hero Section -->
+        <section class="converter-hero">
+            <div class="container">
+                <div class="converter-layout">
+                    <!-- Left Side - Info -->
+                    <div class="converter-info reveal-on-scroll">
+                        <div class="hero-badge">
+                            <span class="pulse-dot"></span>
+                            <span data-i18n="converter_eyebrow">Conversor MIDI</span>
+                        </div>
+                        <h1>
+                            Transforme Música em <span class="gradient-text">MIDI</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            Cole o link do YouTube ou faça upload do seu arquivo de áudio e deixe nossa IA de última
+                            geração fazer a mágica.
+                        </p>
+
+                        <div class="converter-features">
+                            <div class="converter-feature">
+                                <div class="converter-feature-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
+                                    </svg>
+                                </div>
+                                <span>Conversão em menos de 5 segundos</span>
+                            </div>
+                            <div class="converter-feature">
+                                <div class="converter-feature-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" fill="none" />
+                                    </svg>
+                                </div>
+                                <span>Precisão de 98% nas notas</span>
+                            </div>
+                            <div class="converter-feature">
+                                <div class="converter-feature-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                    </svg>
+                                </div>
+                                <span>100% gratuito e seguro</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side - Converter Card -->
+                    <div class="converter-card-premium reveal-on-scroll">
+                        <!-- Tabs -->
+                        <div class="converter-tabs">
+                            <button class="converter-tab active" data-option="youtube">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M23 9.71a8.5 8.5 0 0 0-.91-4.13 2.92 2.92 0 0 0-1.72-1A78.36 78.36 0 0 0 12 4.27a78.45 78.45 0 0 0-8.34.3 2.87 2.87 0 0 0-1.46.74c-.9.83-1 2.25-1.1 3.45a48.29 48.29 0 0 0 0 6.48 9.55 9.55 0 0 0 .3 2 3.14 3.14 0 0 0 .71 1.36 2.86 2.86 0 0 0 1.49.78 45.18 45.18 0 0 0 6.5.33c3.5.05 6.57 0 10.2-.28a2.88 2.88 0 0 0 1.53-.78 2.49 2.49 0 0 0 .61-1 10.58 10.58 0 0 0 .52-3.4c.04-.56.04-3.94.04-4.54ZM9.74 14.85V8.66l5.92 3.11c-1.66.92-3.85 1.96-5.92 3.08Z" />
+                                </svg>
+                                YouTube
+                            </button>
+                            <button class="converter-tab" data-option="upload">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" fill="none"
+                                        stroke="currentColor" stroke-width="2" />
+                                    <polyline points="17 8 12 3 7 8" fill="none" stroke="currentColor"
+                                        stroke-width="2" />
+                                    <line x1="12" y1="3" x2="12" y2="15" fill="none" stroke="currentColor"
+                                        stroke-width="2" />
+                                </svg>
+                                Upload
+                            </button>
+                        </div>
+
+                        <!-- YouTube Input -->
+                        <div class="input-section-premium" id="youtube-input">
+                            <label class="input-label">Link do YouTube</label>
+                            <div class="input-wrapper-premium">
+                                <input type="url" id="youtube-url" placeholder="https://youtube.com/watch?v=..."
+                                    data-i18n-placeholder="converter_placeholder">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                </svg>
+                            </div>
+                            <button class="convert-btn-premium" id="convert-btn">
+                                <span data-i18n="converter_button">Converter para MIDI</span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Upload Input -->
+                        <div class="input-section-premium hidden" id="upload-input">
+                            <div class="upload-area" id="upload-area">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="17 8 12 3 7 8" />
+                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                </svg>
+                                <p data-i18n="converter_upload_text">Arraste seu arquivo aqui ou clique para selecionar
+                                </p>
+                                <span data-i18n="converter_upload_formats">MP3, WAV, OGG (máx. 50MB)</span>
+                                <input type="file" id="file-input" accept="audio/*" hidden>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section hidden" id="progress-section">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <p class="progress-text" id="progress-text" data-i18n="converter_processing">Processando...
+                            </p>
+                        </div>
+
+                        <!-- Result Section -->
+                        <div class="result-section hidden" id="result-section">
+                            <div class="result-card">
+                                <div class="result-icon">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                        <polyline points="22 4 12 14.01 9 11.01" />
+                                    </svg>
+                                </div>
+                                <h3 data-i18n="converter_success_title">Conversão Concluída!</h3>
+                                <p data-i18n="converter_success_text">Seu arquivo MIDI está pronto para download</p>
+                                <button class="download-btn" id="download-btn">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="7 10 12 15 17 10" />
+                                        <line x1="12" y1="15" x2="12" y2="3" />
+                                    </svg>
+                                    <span data-i18n="converter_download">Baixar MIDI</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="info-cards">
+                    <div class="info-card reveal-on-scroll">
+                        <div class="info-card-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
+                            </svg>
+                        </div>
+                        <h4>Ultra Rápido</h4>
+                        <p>Conversão em poucos segundos com tecnologia de ponta</p>
+                    </div>
+                    <div class="info-card reveal-on-scroll">
+                        <div class="info-card-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6v6l4 2" stroke="#000" stroke-width="2" fill="none" />
+                            </svg>
+                        </div>
+                        <h4>Alta Precisão</h4>
+                        <p>IA treinada com milhões de músicas para máxima qualidade</p>
+                    </div>
+                    <div class="info-card reveal-on-scroll">
+                        <div class="info-card-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <h4>100% Seguro</h4>
+                        <p>Seus arquivos são processados com total privacidade</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>KEY MASTER</h3>
+                    <p data-i18n="footer_tagline">O futuro da música digital.</p>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p data-i18n="footer_copyright">© 2026 Key Master. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/translations.js"></script>
+    <script src="js/converter.js"></script>
+    <script src="js/midi-player.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 500);
+        });
+
+        // Tab switching
+        document.querySelectorAll('.converter-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.converter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                const option = this.dataset.option;
+                document.getElementById('youtube-input').classList.toggle('hidden', option !== 'youtube');
+                document.getElementById('upload-input').classList.toggle('hidden', option !== 'upload');
+            });
+        });
+
+        // Upload area
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+
+        if (uploadArea && fileInput) {
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--purple-bright)';
+                uploadArea.style.background = 'rgba(139, 92, 246, 0.1)';
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '';
+                uploadArea.style.background = '';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '';
+                uploadArea.style.background = '';
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    console.log('File dropped:', files[0].name);
+                }
+            });
+        }
+
+        // Smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
